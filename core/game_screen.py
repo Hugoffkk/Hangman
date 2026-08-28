@@ -163,7 +163,7 @@ class TheHangmanScreen(QWidget):
             self.defeat_screen = DefeatScreen(self.word)
             self.defeat_screen.show()
             self.close()
-        elif result == "invalid":
+        elif result == "invalid" or result == "repeated":
             self.animate_shake_input()
         else:
             self.input.clear()

@@ -16,6 +16,7 @@ class TheHangmanGame():
 
         # Select a random word
         self.word = random.choice(self.words_list)
+        self.clean_word = normalize_text(self.word)
 
         # Game initial state
         self.lives: int = 6
@@ -28,7 +29,7 @@ class TheHangmanGame():
     @property
     def word_status(self) -> str:
         """Return the updated status of the word"""
-        return hidden_word(self.word, self.correct_letters)
+        return hidden_word(self.clean_word, self.correct_letters)
 
     def try_guess(self,raw_guess: str) -> str:
         """Game's logic"""
@@ -36,28 +37,27 @@ class TheHangmanGame():
         # Verify the guess is valid and clean it
         if not raw_guess.isalpha():
             return "invalid"
-        clean_guess = normalize_text(raw_guess.lower().strip())
-        clean_word = normalize_text(self.word)
+        self.clean_guess = normalize_text(raw_guess.lower().strip())
 
         # If the guess is the correct word or the word is completed
-        if clean_guess == clean_word:
+        if self.clean_guess == self.clean_word:
             return "won"
 
         # If the letter or word is repeated
-        if clean_guess in self.correct_letters or clean_guess in self.incorrect_guess:
+        if self.clean_guess in self.correct_letters or self.clean_guess in self.incorrect_guess:
             return "repeated"
 
         # If the guess is a correct letter
-        elif len(clean_guess) == 1 and clean_guess in clean_word:
-            self.correct_letters.append(clean_guess)
+        elif len(self.clean_guess) == 1 and self.clean_guess in self.clean_word:
+            self.correct_letters.append(self.clean_guess)
             if self.is_won():
                 return "won"
             return "correct"
 
         # If the guess is a incorrect letter/word
-        elif len(clean_guess) >= 1 and clean_guess not in clean_word:
+        elif len(self.clean_guess) >= 1 and self.clean_guess not in self.clean_word:
             self.lives -= 1
-            self.incorrect_guess.append(clean_guess)
+            self.incorrect_guess.append(self.clean_guess)
             if self.is_defeated():
                 return "defeated"
             return "incorrect"

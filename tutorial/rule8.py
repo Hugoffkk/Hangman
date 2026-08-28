@@ -26,7 +26,7 @@ class RuleEightScreen(QWidget):
         # [Title]
         self.title = QLabel(self.language["rule8"])
         self.title.setObjectName("defeatTitle")
-        self.title.setWordWrap(True)
+        self.title.setWordWrap(False)
 
         # [Images]
         self.image = QLabel()
